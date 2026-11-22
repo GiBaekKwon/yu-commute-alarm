@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>설정 — 영남대 통학 기상 알리미</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css?v=20261122a">
+</head>
+<body>
+<main class="page">
+  <header class="page-head">
+    <h1>설정</h1>
+    <p>에타 시간표 등록과 통학 시간 계산은 <a href="index.html">대시보드</a>에서 해요. 여기서는 수업을 직접 고치고, 다른 기기와 함께 쓰도록 설정해요.</p>
+  </header>
+
+  <p id="status" class="notice" role="status" aria-live="polite"></p>
+
+  <form id="setup-form" novalidate>
+    <!-- 1. 시간표 -->
+    <section class="card" aria-labelledby="h-classes">
+      <h2 id="h-classes">1. 수업 시간표 (직접 편집)</h2>
+      <p class="hint">수업마다 요일과 시간을 입력해요. 시간은 24시간제예요 (오후 1시 = 13:00, "1007" · "10시 7분"처럼 써도 돼요). 같은 요일 수업이 겹치면 저장되지 않아요.</p>
+      <div id="class-list" class="class-list"></div>
+      <button type="button" id="add-class" class="btn btn-block">＋ 수업 추가</button>
+    </section>
+
+    <!-- 2. 동기화 -->
+    <section class="card" aria-labelledby="h-sync">
+      <h2 id="h-sync">2. 다른 기기와 함께 쓰기 (선택)</h2>
+      <p class="hint">동기화 코드를 만들면 서버에도 저장돼요. 폰 · PC에 같은 코드를 넣으면 같은 시간표를 볼 수 있어요. 로그인은 없으니 코드를 다른 사람에게 알려 주지 마세요.</p>
+      <div id="sync-on" class="hidden">
+        <p class="small muted" style="margin:0">내 동기화 코드</p>
+        <p id="sync-code" class="sync-code"></p>
+        <button type="button" id="sync-off" class="btn btn-sm">이 기기에서 연결 해제</button>
+      </div>
+      <div id="sync-off-box">
+        <button type="button" id="sync-make" class="btn btn-block">동기화 코드 만들기</button>
+        <label class="field" style="margin-top:12px">
+          <span>다른 기기에서 만든 코드가 있으면</span>
+          <span class="row" style="flex-wrap:nowrap">
+            <input type="text" id="sync-input" autocapitalize="off" autocomplete="off" spellcheck="false" maxlength="8" placeholder="8자리 코드" style="flex:1">
+            <button type="button" id="sync-load" class="btn">불러오기</button>
+          </span>
+          <small class="err" data-err="sync"></small>
+        </label>
+      </div>
+    </section>
+
+    <!-- 결과 미리보기 -->
+    <section id="preview-card" class="card hidden" aria-labelledby="h-preview">
+      <h2 id="h-preview">저장된 기상 시각</h2>
+      <p class="hint">통학 시간은 <a href="index.html#commute-card">대시보드 "통학 시간 계산"</a>에서 바꿔요.</p>
+      <ul id="preview" class="preview"></ul>
+    </section>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary btn-block">저장</button>
+      <div class="row">
+        <button type="button" id="load-sample" class="btn" style="flex:1">예시 불러오기</button>
+        <button type="button" id="clear-all" class="btn btn-danger" style="flex:1">모두 지우기</button>
+      </div>
+    </div>
+  </form>
+</main>
+
+<script src="js/time.js?v=20261122a"></script>
+<script src="js/calc.js?v=20261122a"></script>
+<script src="js/storage.js?v=20261122a"></script>
+<script src="js/bus.js?v=20261122a"></script>
+<script src="js/setup.js?v=20261122a"></script>
+<script src="js/nav.js?v=20261122a"></script>
+</body>
+</html>

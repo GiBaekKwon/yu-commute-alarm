@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "classes": [
+    { "id": "s1", "name": "자료구조", "day": 1, "start": "09:00", "end": "10:15", "room": "공학관 302호" },
+    { "id": "s2", "name": "운영체제", "day": 1, "start": "13:00", "end": "14:15", "room": "IT관 201호" },
+    { "id": "s3", "name": "컴퓨터네트워크", "day": 2, "start": "10:30", "end": "11:45", "room": "IT관 105호" },
+    { "id": "s4", "name": "자료구조", "day": 3, "start": "09:00", "end": "10:15", "room": "공학관 302호" },
+    { "id": "s5", "name": "운영체제", "day": 3, "start": "15:00", "end": "16:15", "room": "IT관 201호" },
+    { "id": "s6", "name": "컴퓨터네트워크", "day": 4, "start": "10:30", "end": "11:45", "room": "IT관 105호" }
+  ],
+  "commute": {
+    "prepMin": 40,
+    "walkToStopMin": 5,
+    "walkToRoomMin": 8,
+    "bufferMin": 0,
+    "routeId": "route-a",
+    "customTimes": null
+  },
+  "notify": { "enabled": false, "channel": "ntfy", "topic": "", "sendAt": "21:00" }
+}

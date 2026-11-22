@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f5f0">
+  <title>영남대 통학 기상 알리미</title>
+  <script src="js/gate.js?v=20261122a"></script>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css?v=20261122a">
+</head>
+<body class="dash" data-mode="loading">
+<main class="page page-wide">
+  <!-- 상단 바: 브랜드 + 가장 눈에 띄는 행동 하나 (에타 시간표 등록) -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 7.5V10M5.6 11l1.7 1.7M18.4 11l-1.7 1.7"/></svg>
+      </span>
+      <div class="brand-text">
+        <h1>영남대 통학 기상 알리미</h1>
+        <p id="today-date" class="today-date"></p>
+      </div>
+    </div>
+    <button type="button" id="btn-register" class="btn btn-primary btn-cta">
+      <span id="btn-register-label">에타 시간표 등록</span>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </header>
+
+  <p id="status" class="notice" role="status" aria-live="polite"></p>
+
+  <!-- 에타 시간표 등록 (plan.md A-1 · A-2): 링크 입력 → 가져오는 중 → 실패 / 수업 확인 → 저장 -->
+  <section id="register" class="card register hidden" aria-labelledby="h-register">
+    <div class="register-head">
+      <div>
+        <h2 id="h-register">에타 시간표 등록</h2>
+        <p class="hint">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          로그인 없이 공개 링크로만 가져와요
+        </p>
+      </div>
+      <button type="button" id="import-cancel" class="btn btn-icon" aria-label="등록 닫기">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <ol id="import-steps" class="steps" aria-label="등록 단계">
+      <li data-step="1"><span class="step-no">1</span>링크 입력</li>
+      <li data-step="2"><span class="step-no">2</span>수업 확인</li>
+      <li data-step="3"><span class="step-no">3</span>저장</li>
+    </ol>
+
+    <form id="import-form" novalidate>
+      <label class="field" for="import-url"><span>에타 시간표 공개 공유 링크</span></label>
+      <div class="url-row">
+        <div class="url-input">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+          <input type="url" id="import-url" inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="false"
+                 placeholder="https://everytime.kr/@..." aria-describedby="import-help">
+        </div>
+        <button type="submit" id="import-go" class="btn btn-primary">가져오기</button>
+      </div>
+      <p id="import-help" class="hint small">에타 시간표의 공유 기능에서 복사한 <strong>공개 링크</strong>를 붙여 넣어 주세요. 가져온 수업을 확인한 뒤 저장해요.</p>
+
+      <div id="import-loading" class="import-loading hidden" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <div>
+          <p class="state-title">에타에서 시간표를 읽는 중이에요</p>
+          <p class="small muted">잠시만 기다려 주세요. 아직 아무것도 저장되지 않았어요.</p>
+        </div>
+      </div>
+
+      <div id="import-error" class="state-box state-err hidden" role="alert">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V13M12 16.5v.01"/></svg>
+        <div class="state-body">
+          <p class="state-title">가져오지 못했어요</p>
+          <p id="import-error-msg"></p>
+          <div class="row">
+            <button type="button" class="btn btn-sm" data-action="demo">예시 시간표로 체험</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div id="import-preview" class="hidden">
+      <div class="state-box state-ok">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg>
+        <div class="state-body">
+          <p class="state-title">가져온 수업을 확인해 주세요</p>
+          <p id="preview-summary" class="preview-summary"></p>
+        </div>
+      </div>
+      <ul id="preview-list" class="import-list"></ul>
+      <p id="preview-notes" class="notice notice-neutral small hidden"></p>
+      <div class="row preview-actions">
+        <button type="button" id="import-save" class="btn btn-primary">시간표 저장</button>
+        <button type="button" id="import-retry" class="btn">다시 입력</button>
+      </div>
+      <p class="small muted preview-foot">"시간표 저장"을 누르기 전에는 아무것도 바뀌지 않아요.</p>
+    </div>
+  </section>
+
+  <!-- 예시 체험 중 안내 -->
+  <section id="demo-bar" class="demo-bar hidden" aria-label="예시 체험 안내">
+    <p><span class="dot" aria-hidden="true"></span><strong>예시 시간표로 체험 중</strong><span class="muted">· 저장되지 않아요</span></p>
+    <div class="row">
+      <button type="button" id="demo-alert" class="btn btn-sm">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        알림 바로 확인
+      </button>
+      <button type="button" id="demo-end" class="btn btn-sm btn-ghost">체험 끝내기</button>
+    </div>
+  </section>
+
+  <!-- 대시보드: 모바일은 다음 수업 → 오늘 남은 수업 → 주간 시간표, 넓은 화면은 왼쪽(지금) · 오른쪽(주간) -->
+  <div class="dash-grid">
+    <div class="dash-now">
+      <!-- 첫 방문: 다음 수업 카드 자리 미리 보기 -->
+      <section id="intro" class="hero intro hidden" aria-labelledby="h-intro">
+        <p class="eyebrow">다음 수업까지</p>
+        <p class="count count-placeholder" aria-hidden="true">--:--</p>
+        <h2 id="h-intro">등록하면 여기에 남은 시간이 보여요</h2>
+        <p class="intro-sub">수업 10분 전에는 이 자리에서 알려 드려요. 지금 보이는 시간표는 예시예요.</p>
+        <div class="row">
+          <button type="button" class="btn" data-action="demo">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>
+            예시 시간표로 체험
+          </button>
+        </div>
+      </section>
+
+      <!-- 수업 10분 전 알림 (plan.md A-3): 카운트다운 바로 위, 스크롤해도 화면 위에 붙어 있음 -->
+      <div id="alert-banner" class="alert-banner hidden" role="alert" aria-live="assertive">
+        <span class="alert-ico" aria-hidden="true">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        </span>
+        <div class="alert-main">
+          <p class="alert-eyebrow">수업 10분 전 알림</p>
+          <div class="alert-text">
+            <p class="alert-title"><strong id="alert-name"></strong> <span id="alert-room" class="alert-room"></span></p>
+            <p class="alert-sub"><span id="alert-left" class="alert-left"></span> 뒤 시작해요</p>
+          </div>
+        </div>
+        <button type="button" id="alert-close" class="btn btn-sm btn-on-accent">확인</button>
+      </div>
+
+      <section id="next-card" class="hero next-card hidden" aria-labelledby="h-next">
+        <h2 id="h-next" class="eyebrow">다음 수업까지</h2>
+        <div id="next-body"></div>
+      </section>
+
+      <section id="today-card" class="section today-card hidden" aria-labelledby="h-today">
+        <h2 id="h-today">오늘 남은 수업 <span id="today-count" class="count-chip"></span></h2>
+        <div id="today-body"></div>
+      </section>
+
+      <!-- 통학 계획 (부가 기능이지만 주요): 총 소요 · 요일별 출발 · 기상 · 단축어용 복사 + 통학 시간 계산 패널 -->
+      <section id="commute-card" class="card sheet commute-card hidden" aria-labelledby="h-commute">
+        <div class="card-head">
+          <h2 id="h-commute">
+            <span class="h-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="13.5" rx="2.5"/><path d="M5 10.5h14M8 20v-3M16 20v-3M8.5 13.8h.01M15.5 13.8h.01"/></svg></span>
+            통학 계획
+          </h2>
+          <button type="button" id="cm-open" class="btn btn-sm">통학 시간 계산</button>
+        </div>
+        <div id="commute-body"></div>
+
+        <!-- 통학 시간 계산: 출발지 · 도착지 · 준비 · 여유 → 이동 시간(길찾기 API, 연결 전엔 2호선 시각표 · 직접 입력) → 저장 -->
+        <div id="commute-form" class="commute-form hidden">
+          <ol id="cm-steps" class="steps" aria-label="통학 시간 계산 단계">
+            <li data-step="1"><span class="step-no">1</span>출발 · 도착</li>
+            <li data-step="2"><span class="step-no">2</span>이동 시간</li>
+            <li data-step="3"><span class="step-no">3</span>저장</li>
+          </ol>
+          <div class="grid2">
+            <label class="field span2"><span>출발지</span>
+              <input type="text" id="cm-from" list="cm-stations" maxlength="40" autocomplete="off" spellcheck="false" placeholder="예: 반월당역 (가까운 역 · 정류장)">
+            </label>
+            <label class="field span2"><span>도착지</span>
+              <input type="text" id="cm-to" list="cm-stations" maxlength="40" autocomplete="off" spellcheck="false" value="영남대">
+            </label>
+            <label class="field"><span>준비 시간</span>
+              <span class="unit"><input type="number" id="cm-prep" inputmode="numeric" min="0" step="1" placeholder="30"></span>
+            </label>
+            <label class="field"><span>여유 시간</span>
+              <span class="unit"><input type="number" id="cm-buffer" inputmode="numeric" min="0" step="1" placeholder="10"></span>
+            </label>
+          </div>
+          <p class="hint small muted" style="margin:6px 0 0">준비 · 여유 시간은 비워 두면 회색 글씨 값(30분 · 10분)으로 계산해요.</p>
+          <datalist id="cm-stations"></datalist>
+          <p class="cm-privacy">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            집 주소는 받지 않아요. 가까운 역 · 정류장으로 계산하고, 저장되는 건 걸리는 시간(분)뿐이에요.
+          </p>
+          <p id="cm-form-err" class="err" role="alert"></p>
+          <button type="button" id="cm-calc" class="btn btn-primary btn-block">이동 시간 계산</button>
+          <div id="cm-loading" class="import-loading hidden" role="status">
+            <span class="spinner" aria-hidden="true"></span>
+            <div><p class="state-title">이동 시간을 계산하는 중이에요</p></div>
+          </div>
+
+          <div id="cm-result" class="cm-result hidden">
+            <div id="cm-route" class="state-box"></div>
+            <label class="field cm-travel"><span>이동 시간 (출발지 → 도착지)</span>
+              <span class="unit"><input type="number" id="cm-travel" inputmode="numeric" min="1" step="1" placeholder="예: 40"></span>
+            </label>
+            <div id="cm-total"></div>
+            <p id="cm-err" class="err" role="alert"></p>
+            <div class="row preview-actions">
+              <button type="button" id="cm-save" class="btn btn-primary">통학 시간 저장</button>
+              <button type="button" id="cm-cancel" class="btn">취소</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 크롬 확장 연결: 동기화 코드를 만들어 보여 준다 (확장 팝업에서 이 코드로 서버의 시간표를 읽음) -->
+      <details id="ext-card" class="card sheet fold ext-card hidden">
+        <summary>
+          <span class="sum-ico" aria-hidden="true">
+            <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></svg>
+          </span>
+          <span class="sum-text"><strong>크롬 확장 연결</strong><span>PC에서 수업 시작 전 알림 받기</span></span>
+          <svg class="ico sum-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div id="ext-body" class="fold-body">
+          <!-- 확장 받기: 웹 스토어 미등록이라 zip + 개발자 모드로 설치 (extension/ 에서 test/ 를 뺀 묶음) -->
+          <div id="ext-install">
+            <p class="eyebrow">확장 프로그램 설치 (PC 크롬, 처음 한 번)</p>
+            <a href="download/wakeup-extension.zip" download class="btn btn-block">통학 알리미 확장 받기 (.zip)</a>
+            <ol class="ext-steps" style="margin-top:12px">
+              <li>받은 zip의 압축을 풀어요 → <strong>wakeup-ext</strong> 폴더가 생겨요.</li>
+              <li>주소창에 <strong>chrome://extensions</strong> 를 입력하고 오른쪽 위 <strong>개발자 모드</strong>를 켜요.</li>
+              <li><strong>압축해제된 확장 프로그램을 로드합니다</strong>를 누르고 <strong>wakeup-ext</strong> 폴더를 골라요.</li>
+              <li>툴바의 퍼즐 모양 아이콘에서 <strong>통학 알리미</strong>를 고정하면 바로 눌러 쓸 수 있어요.</li>
+            </ol>
+            <p class="small muted">설치한 폴더는 지우지 마세요. 지우면 확장도 동작하지 않아요.</p>
+          </div>
+          <!-- 예시 체험 모드: 동기화 코드 없이 확장 자체의 예시 데이터로 체험 -->
+          <div id="ext-demo" class="hidden">
+            <p class="eyebrow">바로 써 보기 (예시 체험)</p>
+            <ol class="ext-steps">
+              <li>위 방법으로 설치한 뒤 툴바의 <strong>통학 알리미</strong> 아이콘을 눌러요.</li>
+              <li>코드 입력 화면 아래 <strong>예시 데이터로 보기</strong>를 누르면 코드 없이 카운트다운 · 오늘 남은 수업 · 수업 전 PC 알림을 써 볼 수 있어요.</li>
+            </ol>
+            <p class="small muted">내 시간표를 연결하려면 에타 시간표를 저장한 뒤 이 카드에서 동기화 코드를 만들어요.</p>
+          </div>
+          <div id="ext-nocode">
+            <p class="small muted">PC 크롬 확장 프로그램 <strong>통학 알리미</strong>에 이 시간표를 연결해요. 동기화 코드를 만들면 시간표가 서버에도 저장되고, 확장은 그 코드로 시간표를 불러와요.</p>
+            <button type="button" id="ext-make" class="btn btn-primary">동기화 코드 만들기</button>
+          </div>
+          <div id="ext-hascode" class="hidden">
+            <p class="eyebrow">동기화 코드</p>
+            <div class="code-row">
+              <span id="ext-code" class="ext-code"></span>
+              <button type="button" id="ext-copy" class="btn btn-sm">복사</button>
+            </div>
+            <ol class="ext-steps">
+              <li>크롬 툴바에서 <strong>통학 알리미</strong> 확장 아이콘을 눌러요.</li>
+              <li>위 코드를 붙여 넣고 <strong>연결</strong>을 눌러요.</li>
+            </ol>
+            <p class="small muted">코드를 아는 사람은 이 시간표를 볼 수 있으니 다른 사람에게 알려 주지 마세요. 연결 해제는 <a href="setup.html#h-sync">설정</a>에서 할 수 있어요.</p>
+          </div>
+          <p id="ext-msg" class="notice small hidden" role="status"></p>
+        </div>
+      </details>
+    </div>
+
+    <section id="week-card" class="card sheet week-card hidden" aria-labelledby="h-week">
+      <div class="card-head">
+        <h2 id="h-week">주간 시간표 <span id="week-badge" class="badge badge-example hidden">예시</span></h2>
+        <p id="week-legend" class="legend"></p>
+      </div>
+      <div id="week-body"></div>
+    </section>
+  </div>
+
+
+  <p class="foot-note">시각은 이 기기의 시계 기준이에요. 알림은 이 화면이 열려 있을 때 표시돼요.</p>
+</main>
+
+<script src="js/time.js?v=20261122a"></script>
+<script src="js/calc.js?v=20261122a"></script>
+<script src="js/classes.js?v=20261122a"></script>
+<script src="js/commute.js?v=20261122a"></script>
+<script src="js/storage.js?v=20261122a"></script>
+<script src="js/bus.js?v=20261122a"></script>
+<script src="js/vendor/qrcode.js?v=20261122a"></script>
+<script src="js/dashboard.js?v=20261122a"></script>
+<script src="js/nav.js?v=20261122a"></script>
+</body>
+</html>

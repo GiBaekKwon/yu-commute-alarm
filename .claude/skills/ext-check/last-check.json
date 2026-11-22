@@ -1,0 +1,17 @@
+{
+ "version": "0.2.4",
+ "hashes": {
+  "extension/background.js": "0bd403ed25c6ff3d9fb02e9ac92d551ea0a37bd6",
+  "extension/config.js": "b12353622065b6ea5889c7e3767cf18e0026100a",
+  "extension/icons/icon128.png": "765cd2a92bf85f7c2573fa4d02c6efc6c3c0ed7a",
+  "extension/icons/icon16.png": "10f858c3ba710321be8c9832e927c8ecef8d9eba",
+  "extension/icons/icon32.png": "928b4ed6002efc7ff00f2d81d6382b1e85ab5fa6",
+  "extension/icons/icon48.png": "929abbe222cc3a38d278cfc976d89c392342d278",
+  "extension/js/schedule.js": "209ca955eefdefbb9a791bd28d2d38741701ae15",
+  "extension/manifest.json": "6d1fb6fedf1fec6717ae10184ca220644ea6cca5",
+  "extension/popup.css": "c18c2d595f4c00ad60e93291ae5202c3b7a7a720",
+  "extension/popup.html": "82b792cdbc1441668e4e2487aa00b4ab93aa6b8b",
+  "extension/popup.js": "921fa6435588318abb2f9197bd14bd174869449e",
+  "extension/sample-profile.json": "4f7b6a631b7041d0bae034e2a8ec4ca016a05212"
+ }
+}

@@ -1,0 +1,125 @@
+{
+ "line": "대구 도시철도 2호선",
+ "direction": "하선 (문양 → 영남대)",
+ "to": "영남대",
+ "source": "대구교통공사 2호선 열차시각표(하선) CSV, 2024-10-10 기준 · 평일 열차의 역 출발 → 영남대 도착 중앙값",
+ "note": "열차 탑승 시간만 포함 (집 → 역 도보 · 열차 대기 제외)",
+ "stations": [
+  {
+   "name": "문양",
+   "minutes": 55.0
+  },
+  {
+   "name": "다사",
+   "minutes": 51.2
+  },
+  {
+   "name": "대실",
+   "minutes": 49.2
+  },
+  {
+   "name": "강창",
+   "minutes": 47.1
+  },
+  {
+   "name": "계명대",
+   "minutes": 45.1
+  },
+  {
+   "name": "성서산업단지",
+   "minutes": 43.0
+  },
+  {
+   "name": "이곡",
+   "minutes": 41.3
+  },
+  {
+   "name": "용산",
+   "minutes": 39.1
+  },
+  {
+   "name": "죽전",
+   "minutes": 37.3
+  },
+  {
+   "name": "감삼",
+   "minutes": 35.6
+  },
+  {
+   "name": "두류",
+   "minutes": 33.8
+  },
+  {
+   "name": "내당",
+   "minutes": 32.2
+  },
+  {
+   "name": "반고개",
+   "minutes": 30.5
+  },
+  {
+   "name": "청라언덕",
+   "minutes": 28.8
+  },
+  {
+   "name": "반월당",
+   "minutes": 26.8
+  },
+  {
+   "name": "경대병원",
+   "minutes": 25.0
+  },
+  {
+   "name": "대구은행",
+   "minutes": 22.9
+  },
+  {
+   "name": "범어",
+   "minutes": 21.1
+  },
+  {
+   "name": "수성구청",
+   "minutes": 19.3
+  },
+  {
+   "name": "만촌",
+   "minutes": 17.6
+  },
+  {
+   "name": "담티",
+   "minutes": 15.8
+  },
+  {
+   "name": "연호",
+   "minutes": 13.2
+  },
+  {
+   "name": "수성알파시티",
+   "minutes": 11.5
+  },
+  {
+   "name": "고산",
+   "minutes": 9.4
+  },
+  {
+   "name": "신매",
+   "minutes": 7.5
+  },
+  {
+   "name": "사월",
+   "minutes": 5.6
+  },
+  {
+   "name": "정평",
+   "minutes": 3.6
+  },
+  {
+   "name": "임당",
+   "minutes": 1.7
+  },
+  {
+   "name": "영남대",
+   "minutes": 0
+  }
+ ]
+}

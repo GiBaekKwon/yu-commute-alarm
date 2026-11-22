@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>통학 알리미</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <h1>통학 알리미</h1>
+    <span id="sync" class="chip" hidden></span>
+  </header>
+
+  <!-- 동기화 코드 입력 -->
+  <section id="view-code" class="view" hidden>
+    <p class="guide">웹 등록 화면에 보이는 <b>동기화 코드 8자리</b>를 입력하세요.</p>
+    <form id="code-form" class="code-form">
+      <input id="code-input" type="text" maxlength="8" autocomplete="off" spellcheck="false"
+             placeholder="예: ab12cd34" aria-label="동기화 코드">
+      <button type="submit" id="code-submit" class="btn">연결</button>
+    </form>
+    <p id="code-msg" class="msg" hidden></p>
+    <div class="code-actions">
+      <button type="button" id="btn-sample" class="link">예시 데이터로 보기</button>
+      <button type="button" id="btn-cancel" class="link" hidden>돌아가기</button>
+    </div>
+  </section>
+
+  <!-- 메인: 오늘 · 주간 -->
+  <section id="view-main" class="view" hidden>
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab on" data-tab="today" role="tab">오늘</button>
+      <button type="button" class="tab" data-tab="week" role="tab">주간</button>
+    </nav>
+
+    <div id="tab-today" class="panel">
+      <div class="hero">
+        <p id="hero-label" class="hero-label"></p>
+        <p id="hero-big" class="hero-big"></p>
+        <p id="hero-sub" class="hero-sub"></p>
+      </div>
+      <h2 class="section-title">오늘 남은 수업</h2>
+      <ul id="remaining" class="class-list"></ul>
+    </div>
+
+    <div id="tab-week" class="panel" hidden>
+      <div id="grid" class="grid"></div>
+    </div>
+
+    <!-- 수업 N분 전 PC 알림 (전날 밤 기상 알림과는 별개) -->
+    <div class="reminder">
+      <label class="rm-row">
+        <input type="checkbox" id="rm-enabled">
+        <span>수업</span>
+        <select id="rm-lead" aria-label="알림 시점">
+          <option value="5">5분</option>
+          <option value="10">10분</option>
+          <option value="15">15분</option>
+        </select>
+        <span>전 알림</span>
+      </label>
+      <div class="rm-row rm-sub">
+        <span id="rm-next" class="rm-next"></span>
+        <button type="button" id="rm-test" class="link">테스트 알림 (1분 뒤)</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bottom">
+    <a id="link-web" href="#" target="_blank" rel="noopener" hidden>대시보드 ↗</a>
+    <button type="button" id="btn-code" class="link" hidden>코드 변경</button>
+    <span class="note">기기 시각 기준</span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

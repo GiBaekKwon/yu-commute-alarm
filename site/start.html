@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f5f0">
+  <meta name="description" content="에브리타임 시간표를 한 번 등록하면 수업 10분 전에 알려 드리고, 통학 시간에 맞춘 기상 · 출발 시각도 계산해 드려요.">
+  <title>영남대 통학 기상 알리미</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css?v=20261122a">
+</head>
+<body class="welcome">
+
+<!-- A + C 전체 화면 인트로 (11/21): 밤하늘 · 큰 시계 06:00→07:20 · 해가 뜬 뒤 카드 장면으로 줄어듦. 탭하면 건너뜀 (js/start.js) -->
+<div class="ws-intro" id="ws-intro" aria-hidden="true">
+  <div class="wi-layer wi-day"></div>
+  <div class="wi-layer wi-glow"></div>
+  <div class="wi-layer wi-night"></div>
+  <div class="wi-sun">
+    <svg class="wi-sun-rays" viewBox="0 0 120 120">
+      <path d="M60 4v12M60 104v12M4 60h12M104 60h12M20.4 20.4l8.5 8.5M91.1 91.1l8.5 8.5M20.4 99.6l8.5-8.5M91.1 28.9l8.5-8.5"/>
+    </svg>
+    <span class="wi-sun-core"></span>
+  </div>
+  <svg class="wi-land" viewBox="0 0 400 64" preserveAspectRatio="none">
+    <path fill="var(--wi-hill-back)" d="M0 30 C70 6 140 4 210 24 S330 46 400 16 V64 H0Z"/>
+    <path fill="var(--wi-hill-front)" d="M0 46 C80 26 160 28 240 42 S350 54 400 38 V64 H0Z"/>
+  </svg>
+  <div class="wi-shade"></div>
+
+  <div class="wi-center">
+    <svg class="ico wi-alarm" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M5 3 2 6M19 3l3 3"/></svg>
+    <div class="wi-clock">
+      <span class="wi-digit"><span class="wi-strip"><span>0</span></span></span>
+      <span class="wi-digit"><span class="wi-strip wi-roll-h"><span>6</span><span>7</span></span></span>
+      <span class="wi-colon">:</span>
+      <span class="wi-digit"><span class="wi-strip wi-roll-m1"><span>0</span><span>1</span><span>2</span></span></span>
+      <span class="wi-digit"><span class="wi-strip wi-roll-m2"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>0</span></span></span>
+    </div>
+    <p class="wi-label"><span class="wi-l1">내일 첫 수업 09:00</span><span class="wi-l2"><em>이때</em> 일어나면 지각 안 해요</span></p>
+  </div>
+  <p class="wi-skip">화면을 누르면 건너뛰어요</p>
+</div>
+
+<main class="welcome-page">
+  <div class="welcome-brand ws-rise">
+    <span class="brand-mark" aria-hidden="true">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 7.5V10M5.6 11l1.7 1.7M18.4 11l-1.7 1.7"/></svg>
+    </span>
+    <span>영남대 통학 기상 알리미</span>
+  </div>
+
+  <!-- 카드 장면 (11/21): 인트로가 여기로 줄어든 뒤 버스가 '영남대' 정류장에 선다. [시작하기] 누르면 버스 출발 (js/start.js) -->
+  <div class="ws-scene" id="ws-scene" aria-hidden="true">
+    <div class="ws-sky ws-sky-day"></div>
+    <div class="ws-sky ws-sky-glow"></div>
+
+    <div class="ws-sun">
+      <svg class="ws-sun-rays" viewBox="0 0 120 120">
+        <path d="M60 6v12M60 102v12M6 60h12M102 60h12M21.8 21.8l8.5 8.5M89.7 89.7l8.5 8.5M21.8 98.2l8.5-8.5M89.7 30.3l8.5-8.5"/>
+      </svg>
+      <span class="ws-sun-core"></span>
+    </div>
+
+    <span class="ws-wake-chip">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M5 3 2 6M19 3l3 3"/></svg>
+      07:20 기상
+    </span>
+
+    <svg class="ws-land" viewBox="0 0 400 64" preserveAspectRatio="none">
+      <path fill="var(--ws-hill-back)" d="M0 40 C60 14 120 10 190 30 S320 52 400 22 V64 H0Z"/>
+      <path fill="var(--ws-hill-front)" d="M0 52 C80 34 150 36 230 48 S350 58 400 44 V64 H0Z"/>
+    </svg>
+    <div class="ws-road"></div>
+
+    <div class="ws-stop"><span>영남대</span></div>
+
+    <div class="ws-bus">
+      <span class="ws-puff"></span><span class="ws-puff"></span>
+      <svg viewBox="0 0 92 44">
+        <rect x="2" y="2" width="86" height="32" rx="8" fill="var(--accent)"/>
+        <path d="M2 26h86a8 8 0 0 1-8 8H10a8 8 0 0 1-8-8z" fill="var(--accent-strong)"/>
+        <rect x="9" y="8" width="13" height="11" rx="2.5" fill="#fff4ec"/>
+        <rect x="25" y="8" width="13" height="11" rx="2.5" fill="#fff4ec"/>
+        <rect x="41" y="8" width="13" height="11" rx="2.5" fill="#fff4ec"/>
+        <rect x="58" y="8" width="10" height="22" rx="2" fill="#fff4ec" opacity=".85"/>
+        <path d="M73 8h8a4 4 0 0 1 4 4v8H73z" fill="#fff4ec"/>
+        <circle cx="85" cy="27" r="2" fill="#fff1a8"/>
+        <g class="ws-wheel"><circle cx="22" cy="35" r="7" fill="#1d1b18"/><circle cx="22" cy="35" r="2.6" fill="#cdc6ba"/><path d="M22 29.5v3" stroke="#cdc6ba" stroke-width="1.6" stroke-linecap="round"/></g>
+        <g class="ws-wheel"><circle cx="70" cy="35" r="7" fill="#1d1b18"/><circle cx="70" cy="35" r="2.6" fill="#cdc6ba"/><path d="M70 29.5v3" stroke="#cdc6ba" stroke-width="1.6" stroke-linecap="round"/></g>
+      </svg>
+    </div>
+  </div>
+
+  <section class="welcome-hero" aria-labelledby="h-welcome">
+    <h1 id="h-welcome"><span class="wh-line ws-rise ws-d1">수업 전엔 <em>알림</em>,</span><span class="wh-line ws-rise ws-d2">아침엔 <em>기상 시각</em></span></h1>
+    <p class="welcome-sub ws-rise ws-d3">에브리타임 시간표를 한 번 등록하면 수업 10분 전에 알려 드리고, 통학 시간에 맞춰 몇 시에 일어나야 하는지도 계산해 드려요.</p>
+  </section>
+
+  <ul class="welcome-points">
+    <li class="ws-rise ws-d4">
+      <span class="wp-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6.5 2 6.5H4S6 14 6 9"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
+      <div><strong>수업 10분 전 알림</strong><span>다음 수업까지 남은 시간을 보여 주고, 10분 전엔 화면으로 알려요</span></div>
+    </li>
+    <li class="ws-rise ws-d5">
+      <span class="wp-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></span>
+      <div><strong>요일별 기상 · 출발 시각</strong><span>출발역만 넣으면 첫 수업에 맞춰 계산해요</span></div>
+    </li>
+    <li class="ws-rise ws-d6">
+      <span class="wp-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span>
+      <div><strong>에타 링크로 한 번 등록</strong><span>로그인 없이 공개 공유 링크만 붙여 넣어요</span></div>
+    </li>
+  </ul>
+
+  <div class="welcome-actions">
+    <a id="start" href="index.html" class="btn btn-primary btn-block welcome-cta">
+      시작하기
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <p class="welcome-note">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      주소 · 이름 · 학번은 받지 않아요
+    </p>
+  </div>
+</main>
+
+<!-- B [시작하기] 화면 전환: 버튼에서 주황 원 → 바탕색 원 -->
+<div class="ws-wipe ws-wipe-1" aria-hidden="true"></div>
+<div class="ws-wipe ws-wipe-2" aria-hidden="true"></div>
+
+<script src="js/start.js?v=20261122a"></script>
+</body>
+</html>

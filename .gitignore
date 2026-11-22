@@ -1,0 +1,13 @@
+# 서버 저장 데이터 (배포 · 커밋 제외)
+server/profiles/
+__pycache__/
+
+# 테스트 도구
+tests/node_modules/
+tests/screenshots/
+.env
+
+# 개인 설정 · 백업
+.claude/settings.local.json
+*.bak
+*.tar.gz

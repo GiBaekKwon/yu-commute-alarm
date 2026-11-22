@@ -1,0 +1,39 @@
+# 영남대 통학 기상 알리미 — 프로필 저장 API (2단계)
+# 코드  : /root/wakeup/server/app.py
+# 데이터: /var/lib/wakeup-api/profiles/<code>.json
+# 주소  : 127.0.0.1:5100 (nginx 의 /wakeup/api/ 가 여기로 전달)
+#
+# 설치 : cp wakeup-api.service /etc/systemd/system/ && systemctl daemon-reload && systemctl enable --now wakeup-api
+# 상태 : systemctl status wakeup-api
+# 로그 : journalctl -u wakeup-api -f
+
+[Unit]
+Description=Wakeup API (Flask, 127.0.0.1:5100)
+After=network.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/wakeup/server
+ExecStart=/usr/bin/python3 /root/wakeup/server/app.py
+Environment=PYTHONUNBUFFERED=1
+Environment=WAKEUP_PORT=5100
+Environment=WAKEUP_DATA_DIR=/var/lib/wakeup-api/profiles
+EnvironmentFile=/root/wakeup/.env
+Restart=always
+RestartSec=3
+
+# --- 보호 설정: 데이터 폴더 말고는 쓰지 못하게 ---
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/wakeup-api
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target

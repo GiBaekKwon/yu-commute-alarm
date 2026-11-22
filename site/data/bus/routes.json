@@ -1,0 +1,5 @@
+[
+  { "id": "route-a", "name": "예시 노선 A (예시 정류장 A → 영남대)", "file": "route-a.json" },
+  { "id": "route-b", "name": "예시 노선 B (예시 정류장 B → 영남대)", "file": "route-b.json" },
+  { "id": "route-c", "name": "예시 노선 C (예시 정류장 C → 영남대)", "file": "route-c.json" }
+]

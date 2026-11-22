@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 실제 공개 링크 응답(2026-11-21 확인)과 같은 구조의 가짜 데이터. 과목 · 강의실 · 이름은 지어낸 값 -->
+<response>
+  <table year="2026" semester="2" status="1" identifier="FAKEidentifier000000">
+    <subject id="1001">
+      <internal value="FAKE001"/>
+      <name value="자료구조"/>
+      <professor value="홍길동"/>
+      <time value="월3 수2">
+        <data day="0" starttime="126" endtime="141" place="E21-101"/>
+        <data day="2" starttime="108" endtime="123" place="E21-101"/>
+      </time>
+      <place value="E21-101, E21-101"/>
+      <credit value="3"/>
+      <closed value="0"/>
+    </subject>
+    <subject id="1002">
+      <internal value="FAKE002"/>
+      <name value="캡스톤디자인"/>
+      <professor value="김철수"/>
+      <time value="화 18:50-21:15">
+        <data day="1" starttime="226" endtime="255" place=""/>
+      </time>
+      <place value="E21-102"/>
+      <credit value="3"/>
+      <closed value="0"/>
+    </subject>
+    <subject id="1003">
+      <internal value="FAKE003"/>
+      <name value="온라인교양"/>
+      <professor value="이영희"/>
+      <time value=""/>
+      <place value=""/>
+      <credit value="2"/>
+      <closed value="0"/>
+    </subject>
+    <subject id="1004">
+      <internal value="FAKE004"/>
+      <name value="토요특강"/>
+      <professor value="박민수"/>
+      <time value="토1">
+        <data day="5" starttime="108" endtime="144" place="E21-103"/>
+      </time>
+      <place value="E21-103"/>
+      <credit value="1"/>
+      <closed value="0"/>
+    </subject>
+  </table>
+  <user name="가짜사용자"/>
+</response>

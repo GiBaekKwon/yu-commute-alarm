@@ -1,0 +1,11 @@
+{
+  "name": "wakeup-tests",
+  "private": true,
+  "description": "영남대 통학 기상 알리미 — 브라우저 없이 · 헤드리스 브라우저로 화면 동작 검사 (site/ 배포에는 포함되지 않음)",
+  "devDependencies": {
+    "jsdom": "24.1.3",
+    "jsqr": "1.4.0",
+    "playwright-core": "1.48.2",
+    "qrcode-generator": "2.0.4"
+  }
+}

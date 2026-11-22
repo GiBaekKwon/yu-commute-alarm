@@ -1,0 +1,7 @@
+# 영남대 통학 기상 알리미 — 전날 밤 알림 (3단계)
+# 설치: cp wakeup-notify.cron /etc/cron.d/wakeup-notify
+# 1분마다 실행 → 각 프로필의 발송 시각(sendAt)부터 15분 안에 하루 한 번 발송
+# 로그: journalctl -t wakeup-notify   (보낼 때 · 실패할 때만 기록)
+SHELL=/bin/sh
+PATH=/usr/bin:/bin
+* * * * * root /usr/bin/python3 /root/wakeup/server/notify.py 2>&1 | /usr/bin/logger -t wakeup-notify

@@ -1,0 +1,131 @@
+/*
+ * popup.css — 임시 최소 스타일
+ * 디자인은 대시보드(site/css/style.css)가 완성되면 맞춘다 → 아래 :root 변수 값만 바꾸면 된다.
+ */
+:root {
+  --bg: #ffffff;
+  --surface: #f6f7f9;
+  --fg: #1f2328;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --accent: #4a7bd0;
+  --accent-weak: #e8effb;
+  --danger: #c2410c;
+  --radius: 10px;
+  --font: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --popup-width: 340px;
+  --hour-height: 28px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  width: var(--popup-width);
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.45 var(--font);
+}
+
+/* ---- 머리 · 꼬리 ---- */
+.top, .bottom {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  background: var(--surface);
+}
+.top { justify-content: space-between; border-bottom: 1px solid var(--line); }
+.top h1 { margin: 0; font-size: 16px; color: var(--accent); }
+.bottom { border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.bottom .note { margin-left: auto; }
+.bottom a { color: var(--accent); text-decoration: none; }
+
+.chip {
+  padding: 2px 10px; border-radius: 999px;
+  background: var(--line); color: var(--muted); font-size: 12px; white-space: nowrap;
+}
+.chip.ok { background: var(--accent-weak); color: var(--accent); }
+.chip.warn { background: #fdecdf; color: var(--danger); }
+
+.view { padding: 14px 16px; }
+
+/* ---- 버튼 · 입력 ---- */
+.btn {
+  border: 0; border-radius: var(--radius); padding: 8px 14px;
+  background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer;
+}
+.btn:disabled { opacity: .6; cursor: default; }
+.link {
+  border: 0; background: none; padding: 0; color: var(--accent);
+  font: inherit; font-size: 12px; cursor: pointer;
+}
+
+/* ---- 코드 입력 ---- */
+.guide { margin: 0 0 10px; }
+.code-form { display: flex; gap: 8px; }
+.code-form input {
+  flex: 1; min-width: 0; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  font: inherit; letter-spacing: .08em;
+}
+.msg { margin: 8px 0 0; font-size: 12px; color: var(--danger); }
+.code-actions { display: flex; justify-content: space-between; margin-top: 14px; }
+
+/* ---- 탭 ---- */
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.tab {
+  flex: 1; padding: 6px 0; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--bg); color: var(--muted); font: inherit; cursor: pointer;
+}
+.tab.on { background: var(--accent-weak); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+/* ---- 오늘: 카운트다운 ---- */
+.hero {
+  padding: 12px 14px; border-radius: var(--radius);
+  background: var(--surface); text-align: center;
+}
+.hero p { margin: 0; }
+.hero-label { font-size: 12px; color: var(--muted); }
+.hero-big { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hero-big.text { font-size: 18px; padding: 4px 0; }
+.hero-sub { font-size: 13px; color: var(--muted); }
+
+.section-title { margin: 14px 0 6px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.class-list { list-style: none; margin: 0; padding: 0; }
+.class-list li {
+  display: grid; grid-template-columns: 92px 1fr; column-gap: 8px;
+  padding: 7px 0; border-bottom: 1px solid var(--line);
+}
+.class-list li:last-child { border-bottom: 0; }
+.class-list .time { font-variant-numeric: tabular-nums; color: var(--muted); }
+.class-list .name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.class-list .room { grid-column: 2; font-size: 12px; color: var(--muted); }
+.class-list li.now .time, .class-list li.now .name { color: var(--accent); }
+.class-list li.empty { display: block; color: var(--muted); }
+
+/* ---- 수업 전 알림 설정 ---- */
+.reminder { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; }
+.rm-row { display: flex; align-items: center; gap: 6px; }
+.rm-row select { font: inherit; padding: 1px 2px; border: 1px solid var(--line); border-radius: 6px; }
+.rm-sub { justify-content: space-between; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.rm-next { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link:disabled { color: var(--muted); cursor: default; }
+
+/* ---- 주간: 미니 시간표 ---- */
+.grid { display: flex; font-size: 11px; }
+.grid .hours { width: 22px; flex: none; }
+.grid .col { flex: 1; min-width: 0; }
+.grid .head { height: 20px; text-align: center; color: var(--muted); }
+.grid .col.today .head { color: var(--accent); font-weight: 700; }
+.grid .body { position: relative; border-left: 1px solid var(--line); }
+.grid .hours .body { border-left: 0; }
+.grid .col.today .body { background: var(--accent-weak); }
+.grid .hour-line { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line); }
+.grid .hour-label { position: absolute; right: 4px; transform: translateY(-50%); color: var(--muted); }
+.grid .block {
+  position: absolute; left: 2px; right: 2px; overflow: hidden;
+  padding: 2px 3px; border-radius: 4px;
+  background: var(--accent); color: #fff; line-height: 1.2;
+}
+.grid .block .b-name { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.grid .block .b-room { display: block; opacity: .85; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
